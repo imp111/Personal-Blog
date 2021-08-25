@@ -107,4 +107,22 @@ public class ArticleController {
 
         return "redirect:/article/" + article.getId();
     }
+
+    //Delete method, used to delete article (this method gives functionality to the delete button)
+    @GetMapping("/article/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(Model model, @PathVariable Integer id)
+    {
+        if(!this.articleRepository.existsById(id))
+        {
+            return "redirect:/";
+        }
+
+        Article article = this.articleRepository.findById(id).orElse(null);
+
+        model.addAttribute("article", article);
+        model.addAttribute("view", "article/delete");
+
+        return "base-layout";
+    }
 }
