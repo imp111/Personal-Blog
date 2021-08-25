@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -50,5 +51,22 @@ public class ArticleController {
         this.articleRepository.saveAndFlush(articleEntity);
 
         return "redirect:/";
+    }
+
+    //Show full content of article
+    @GetMapping("/article/{id}")
+    public String details(Model model, @PathVariable Integer id)
+    {
+        if (!this.articleRepository.existsById(id))
+        {
+            return "redirect:/";
+        }
+
+        Article article = this.articleRepository.findById(id).orElse(null);
+
+        model.addAttribute("article", article);
+        model.addAttribute("view", "article/details");
+
+        return "base-layout";
     }
 }
