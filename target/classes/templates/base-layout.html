@@ -1,17 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:sec = "http://www.thymeleaf.org/extras/spring-security" >
+    <head th:include="fragments/head" th:with="pageTitle='SoftUni Blog'"></head>
 
-<head th:include="fragments/head" th:with="pageTitle='SoftUni Blog'"></head>
+    <body>
+        <header th:include="fragments/header"></header>
 
-<body>
+        <main th:include="${view}"></main>
 
-<header th:include="fragments/header"></header>
+        <footer th:include="fragments/footer"></footer>
 
-<main th:include="${view}"></main>
-
-<footer th:include="fragments/footer"></footer>
-
-<span th:include="fragments/scripts-bundle"></span>
-
-</body>
+        <span th:include="fragments/scripts-bundle"></span>
+    </body>
 </html>
