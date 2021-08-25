@@ -125,4 +125,22 @@ public class ArticleController {
 
         return "base-layout";
     }
+
+    //Delete process method, used to actually delete the article (actually removes it from the database)
+    @PostMapping("/article/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteProcess(@PathVariable Integer id)
+    {
+        if(!this.articleRepository.existsById(id))
+        {
+            return "redirect:/";
+        }
+
+        Article article = this.articleRepository.findById(id).orElse(null);
+
+        //this removes the article from the database
+        this.articleRepository.delete(article);
+
+        return "redirect:/";
+    }
 }
