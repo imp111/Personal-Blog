@@ -87,4 +87,24 @@ public class ArticleController {
 
         return "base-layout";
     }
+
+    //Edit button functionality, apply the changes to the article
+    @PostMapping("/article/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String editProcess(@PathVariable Integer id, ArticleBindingModel articleBindingModel)
+    {
+        if(!this.articleRepository.existsById(id))
+        {
+            return "redirect:/";
+        }
+
+        Article article = this.articleRepository.findById(id).orElse(null);
+
+        article.setContent(articleBindingModel.getContent());
+        article.setTitle(articleBindingModel.getTitle());
+
+        this.articleRepository.saveAndFlush(article);
+
+        return "redirect:/article/" + article.getId();
+    }
 }
