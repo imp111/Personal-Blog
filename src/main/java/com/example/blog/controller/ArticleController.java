@@ -69,4 +69,22 @@ public class ArticleController {
 
         return "base-layout";
     }
+
+    //Edit button, used to edit the article
+    @GetMapping("/article/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String edit(@PathVariable Integer id, Model model)
+    {
+        if(!this.articleRepository.existsById(id))
+        {
+            return "redirect:/";
+        }
+
+        Article article = this.articleRepository.findById(id).orElse(null);
+
+        model.addAttribute("view", "article/edit");
+        model.addAttribute("article", article);
+
+        return "base-layout";
+    }
 }
