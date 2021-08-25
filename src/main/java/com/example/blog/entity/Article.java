@@ -52,6 +52,14 @@ public class Article {
         this.author = author;
     }
 
+    // Summary
+    @Transient
+    public String getSummary()
+    {
+        return this.getContent().substring(0, this.getContent().length() / 2) + "...";
+    }
+
+
     // Constructors
     public Article(String title, String content, User author)
     {
