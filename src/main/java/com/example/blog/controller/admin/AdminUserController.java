@@ -1,6 +1,7 @@
 package com.example.blog.controller.admin;
 
 import com.example.blog.bindingModel.UserEditBindingModel;
+import com.example.blog.entity.Article;
 import com.example.blog.entity.Role;
 import com.example.blog.entity.User;
 import com.example.blog.repository.ArticleRepository;
@@ -63,7 +64,7 @@ public class AdminUserController {
         return "base-layout";
     }
 
-    //
+    // Edit user role functionality
     @PostMapping("/edit/{id}")
     public String editProcess(@PathVariable Integer id, UserEditBindingModel userBindingModel)
     {
@@ -97,6 +98,44 @@ public class AdminUserController {
         user.setRoles(roles);
 
         this.userRepository.saveAndFlush(user);
+
+        return "redirect:/admin/users/";
+    }
+
+    // Delete users method
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Integer id, Model model)
+    {
+        if (!this.userRepository.existsById(id))
+        {
+            return "redirect:/admin/users/";
+        }
+
+        User user = this.userRepository.findById(id).orElse(null);
+
+        model.addAttribute("user", user);
+        model.addAttribute("view", "admin/user/delete");
+
+        return "base-layout";
+    }
+
+    //Actually deleting the user
+    @PostMapping("/delete/{id}")
+    public String deleteProcess(@PathVariable Integer id)
+    {
+        if (!this.userRepository.existsById(id))
+        {
+            return "redirect:/admin/users/";
+        }
+
+        User user = this.userRepository.findById(id).orElse(null);
+
+        for (Article article : user.getAritcles())
+        {
+            this.articleRepository.delete(article);
+        }
+
+        this.userRepository.delete(user);
 
         return "redirect:/admin/users/";
     }
