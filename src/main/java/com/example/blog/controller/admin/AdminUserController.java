@@ -120,6 +120,7 @@ public class AdminUserController {
     }
 
     //Actually deleting the user
+    // Quick note: if you delete user that created some articles, the articles are removed as well.
     @PostMapping("/delete/{id}")
     public String deleteProcess(@PathVariable Integer id)
     {
