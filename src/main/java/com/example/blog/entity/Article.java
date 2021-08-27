@@ -9,7 +9,7 @@ public class Article {
     private String title;
     private String content;
     private User author;
-    private Category category;
+    //private Category category;
 
     // Id
     @Id
@@ -59,7 +59,8 @@ public class Article {
     {
         return this.getContent().substring(0, this.getContent().length() / 2) + "...";
     }
-
+    
+    /*
     // Category
     @ManyToOne()
     @JoinColumn(nullable = false, name = "categoryId")
@@ -70,7 +71,7 @@ public class Article {
     public void setCategory(Category category) {
         this.category = category;
     }
-
+*/
     // Constructors
     public Article(String title, String content, User author)
     {

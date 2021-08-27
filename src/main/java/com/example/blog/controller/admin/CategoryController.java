@@ -1,3 +1,4 @@
+/*
 package com.example.blog.controller.admin;
 
 import com.example.blog.bindingModel.CategoryBindingModel;
@@ -66,3 +67,4 @@ public class CategoryController {
         return "redirect:/admin/categories/";
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.example.blog.entity;
 
 import javax.persistence.*;
@@ -51,3 +52,4 @@ public class Category {
 
     public Category() { }
 }
+*/
