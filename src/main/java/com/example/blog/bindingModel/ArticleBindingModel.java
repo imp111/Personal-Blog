@@ -9,6 +9,17 @@ public class ArticleBindingModel {
     @NotNull
     private String content;
 
+    private Integer categoryId;
+
+    // Category Id
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
     // Title
     public String getTitle() {
         return title;
