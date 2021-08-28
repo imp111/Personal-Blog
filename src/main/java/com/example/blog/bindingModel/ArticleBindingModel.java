@@ -10,6 +10,16 @@ public class ArticleBindingModel {
     private String content;
 
     private Integer categoryId;
+    private String tagString;
+
+    // Tag String
+    public String getTagString() {
+        return tagString;
+    }
+
+    public void setTagString(String tagString) {
+        this.tagString = tagString;
+    }
 
     // Category Id
     public Integer getCategoryId() {

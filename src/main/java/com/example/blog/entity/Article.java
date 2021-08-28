@@ -1,6 +1,8 @@
 package com.example.blog.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "articles")
@@ -10,6 +12,18 @@ public class Article {
     private String content;
     private User author;
     private Category category;
+    private Set<Tag> tags;
+
+    // Tag
+    @ManyToMany()
+    @JoinColumn(table = "articles_tags")
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 
     // Category
     @ManyToOne()
@@ -72,12 +86,13 @@ public class Article {
     }
 
     // Constructors
-    public Article(String title, String content, User author, Category category)
+    public Article(String title, String content, User author, Category category, HashSet<Tag> tags)
     {
         this.title = title;
         this.content = content;
         this.author = author;
         this.category = category;
+        this.tags = tags;
     }
 
     public Article(){ }

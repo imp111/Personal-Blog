@@ -3,9 +3,11 @@ package com.example.blog.controller;
 import com.example.blog.bindingModel.ArticleBindingModel;
 import com.example.blog.entity.Article;
 import com.example.blog.entity.Category;
+import com.example.blog.entity.Tag;
 import com.example.blog.entity.User;
 import com.example.blog.repository.ArticleRepository;
 import com.example.blog.repository.CategoryRepository;
+import com.example.blog.repository.TagRepository;
 import com.example.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ArticleController {
@@ -28,6 +32,29 @@ public class ArticleController {
     private UserRepository userRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private TagRepository tagRepository;
+
+    private HashSet<Tag> findTagsFromString(String tagString)
+    {
+        HashSet<Tag> tags = new HashSet<>();
+        String[] tagNames = tagString.split(",\\s*");
+
+        for (String tagName : tagNames)
+        {
+            Tag currentTag = this.tagRepository.findByName(tagName);
+
+            if (currentTag == null)
+            {
+                currentTag = new Tag(tagName);
+                this.tagRepository.saveAndFlush(currentTag);
+            }
+
+            tags.add(currentTag);
+        }
+
+        return tags;
+    }
 
     // Create Article and send all categories to the article creation form
     @GetMapping("/article/create")
@@ -52,12 +79,14 @@ public class ArticleController {
 
         User userEntity = this.userRepository.findByEmail(user.getUsername());
         Category category = this.categoryRepository.findById(articleBindingModel.getCategoryId()).orElse(null);
+        HashSet<Tag> tags = this.findTagsFromString(articleBindingModel.getTagString());
 
         Article articleEntity = new Article(
                 articleBindingModel.getTitle(),
                 articleBindingModel.getContent(),
                 userEntity,
-                category
+                category,
+                tags
         );
 
         this.articleRepository.saveAndFlush(articleEntity);
@@ -110,10 +139,13 @@ public class ArticleController {
         }
 
         List<Category> categories = this.categoryRepository.findAll();
+        String tagString = article.getTags().stream()
+                        .map(Tag::getName).collect(Collectors.joining(", "));
 
         model.addAttribute("view", "article/edit");
         model.addAttribute("article", article);
         model.addAttribute("categories", categories);
+        model.addAttribute("tags", tagString);
 
         return "base-layout";
     }
@@ -136,10 +168,13 @@ public class ArticleController {
         }
 
         Category category = this.categoryRepository.findById(articleBindingModel.getCategoryId()).orElse(null);
+        HashSet<Tag> tags = this.findTagsFromString(articleBindingModel.getTagString());
+
 
         article.setCategory(category);
         article.setContent(articleBindingModel.getContent());
         article.setTitle(articleBindingModel.getTitle());
+        article.setTags(tags);
 
         this.articleRepository.saveAndFlush(article);
 
