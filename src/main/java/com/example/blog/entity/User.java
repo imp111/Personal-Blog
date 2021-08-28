@@ -13,7 +13,7 @@ public class User {
     private String fullName;
     private String password;
     private Set<Role> roles;
-    private Set<Article> aritcles;
+    private Set<Article> articles;
 
     // Roles
     @ManyToMany(fetch = FetchType.EAGER)
@@ -74,12 +74,12 @@ public class User {
 
     // Articles
     @OneToMany(mappedBy = "author")
-    public Set<Article> getAritcles() {
-        return aritcles;
+    public Set<Article> getArticles() {
+        return articles;
     }
 
-    public void setAritcles(Set<Article> aritcles) {
-        this.aritcles = aritcles;
+    public void setArticles(Set<Article> articles) {
+        this.articles = articles;
     }
 
     // Checks if the current user is admin or not
@@ -106,7 +106,7 @@ public class User {
         this.fullName = fullName;
         this.password = password;
         this.roles = new HashSet<>();
-        this.aritcles = new HashSet<>();
+        this.articles = new HashSet<>();
     }
 
     public User(){ }

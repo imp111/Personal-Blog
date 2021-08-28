@@ -26,7 +26,6 @@ public class HomeController {
         return "base-layout";
     }
 
-    // Redirect to 403.html if we try to access /admin from user account
     @RequestMapping("/error/403")
     public String accessDenied(Model model)
     {
