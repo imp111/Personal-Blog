@@ -74,11 +74,11 @@ public class User {
 
     // Articles
     @OneToMany(mappedBy = "author")
-    public Set<Article> getAritcles() {
+    public Set<Article> getArticles() {
         return aritcles;
     }
 
-    public void setAritcles(Set<Article> aritcles) {
+    public void setArticles(Set<Article> articles) {
         this.aritcles = aritcles;
     }
 

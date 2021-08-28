@@ -131,7 +131,7 @@ public class AdminUserController {
 
         User user = this.userRepository.findById(id).orElse(null);
 
-        for (Article article : user.getAritcles())
+        for (Article article : user.getArticles())
         {
             this.articleRepository.delete(article);
         }
