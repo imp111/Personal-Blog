@@ -2,8 +2,10 @@ package com.example.blog.controller;
 
 import com.example.blog.bindingModel.ArticleBindingModel;
 import com.example.blog.entity.Article;
+import com.example.blog.entity.Category;
 import com.example.blog.entity.User;
 import com.example.blog.repository.ArticleRepository;
+import com.example.blog.repository.CategoryRepository;
 import com.example.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,19 +18,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
-    // Create Article
+    // Create Article and send all categories to the article creation form
     @GetMapping("/article/create")
     @PreAuthorize("isAuthenticated()")
     public String create(Model model)
     {
+        List<Category> categories = this.categoryRepository.findAll();
+
         model.addAttribute("view", "article/create");
+        model.addAttribute("categories", categories);
 
         return "base-layout";
     }
@@ -42,11 +51,13 @@ public class ArticleController {
                 .getAuthentication().getPrincipal();
 
         User userEntity = this.userRepository.findByEmail(user.getUsername());
+        Category category = this.categoryRepository.findById(articleBindingModel.getCategoryId()).orElse(null);
 
         Article articleEntity = new Article(
                 articleBindingModel.getTitle(),
                 articleBindingModel.getContent(),
-                userEntity
+                userEntity,
+                category
         );
 
         this.articleRepository.saveAndFlush(articleEntity);
